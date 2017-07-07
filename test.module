@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * Implementation of hook_form_id_alter()
+ */
+function test_form_system_site_information_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+
+  $siteapikey = \Drupal::config('test.settings')->get('siteapikey'); //get API key
+//If site API key is set, change the value of the submit button.
+  if ($siteapikey != "") {
+    $form['actions']['submit']['#value'] = t('Update configuration');
+  }
+
+// Add a new field to site information form.
+  $form['info_apikey'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Site API Key',
+  );
+
+  $form['info_apikey']['siteapikey'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Site API Key'),
+    '#description' => t('Please enter the API key'),
+    '#attributes' => array('placeholder' => t('No API Key has been saved yet')),
+    '#default_value' => $siteapikey,
+  );
+
+  //Submit handler.
+  $form['actions']['submit']['#submit'][] = 'test_siteapikey_submit';
+}
+
+/**
+ * Submit handler for site information form.
+ */
+function test_siteapikey_submit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  //save value of new site api key
+  $siteapikey = $form_state->getValue('siteapikey');
+  $config = \Drupal::service('config.factory')->getEditable('test.settings');
+  $config->set('siteapikey', $siteapikey)->save();
+  drupal_set_message('Site API key successfully saved.');
+}

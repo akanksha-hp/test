@@ -1,0 +1,7 @@
+test.get:
+  path: '/page_json/{apikey}/{nid}'
+  defaults: 
+    _controller: '\Drupal\test\Controller\TestController::get_page' 
+  methods:  [GET]
+  requirements:
+    _access: 'TRUE'

@@ -1,0 +1,5 @@
+name: Test Module
+description: Provides a url for accessing nodes of type "Basic Page" with a siteapikey as authentication.
+type: module
+core: 8.x
+
